@@ -8,6 +8,7 @@ public class App {
         ArrayList<BodyMassIndex> bmiData = new ArrayList<BodyMassIndex>();
 
         while (moreInput()) {
+
             double height = getUserHeight();
             double weight = getUserWeight();
 
@@ -19,17 +20,23 @@ public class App {
 
         displayBmiStatistics(bmiData);
     }
-
     // Only Edit Past This Point.
-    private static void displayBmiStatistics(ArrayList<BodyMassIndex> bmiData) {
-        System.out.println("BMI VALUES");
-        System.out.println("Underweight <= 18.5");
-        System.out.println("Normal weight = 18.5 - 24.9");
-        System.out.println("Overweight = 25 - 29.9");
-        System.out.println("Obesity = BMI of 30 or Greater");
+
+    private void displayBmiStatistics(ArrayList<BodyMassIndex> bmiData) {
+        int i;
+        double total = 0;
+        double average = 0;
+
+        for(i = 0; i < bmiData.size; i++) {
+            total += bmiData.bmiScore[i];
+        }
+        average = total / bmiDate.size;
+
+        System.out.println("The average BMI for this input is " + average);
     }
+
     /* Scans in the user's height */
-    private static double getUserHeight() {
+    private double getUserHeight() {
         double userHeight = 0;
         boolean loop = true;
         Scanner sc = new Scanner(System.in);
@@ -42,6 +49,7 @@ public class App {
             /* If the user enters a negative value this will prompt the user to enter another value */
             if (userHeight <= 0) {
                 System.out.println("Negative numbers not supported");
+                sc.nextLine();
             }
             else {
                 loop = false;
@@ -49,8 +57,9 @@ public class App {
         }
         return userHeight;
     }
+
     /* Scans in the user's weight */
-    private static double getUserWeight() {
+    private double getUserWeight() {
         double userWeight = 0;
         boolean loop = true;
         Scanner sc = new Scanner(System.in);
@@ -63,6 +72,7 @@ public class App {
             /* If the user enters a negative value this will prompt the user to enter another value */
             if (userWeight <= 0) {
                 System.out.println("Negative numbers not supported");
+                sc.nextLine();
             }
             else {
                 loop = false;
@@ -71,20 +81,37 @@ public class App {
         return userWeight;
     }
 
-    private static void displayBmiInfo(BodyMassIndex bmi) {
+    private void displayBmiInfo(BodyMassIndex bmi) {
 
-        System.out.println("Your BMI is: %d%n", bmi);
+        System.out.println("Your BMI is: " + bmi.bmiScore);
+
+        if(bmi.bmiCatagory = "Underweight") {
+            System.out.println("And you are Underweight according to the National " +
+                    "Heart Lung and Blood Institution.\n");
+        }
+        else if(bmi.bmiCatagory = "Normal Weight") {
+            System.out.println("And you are Normal Weight according to the National " +
+                    "Heart Lung and Blood Institution.\n");
+        }
+        else if(bmi.bmiCatagory = "Overweight") {
+            System.out.println("And you are Overweight according to the National " +
+                    "Heart Lung and Blood Institution.\n");
+        }
+        else {
+            System.out.println("And you are Obese according to the National " +
+                    "Heart Lung and Blood Institution.\n");
+        }
     }
 
     /* a Boolean function that will return true or false based on if the user enters y or n */
-    public static Boolean moreInput() {
+    private static Boolean moreInput() {
 
         Scanner sc = new Scanner(System.in);
         String decision;
         boolean yn = true;
         boolean loop = true;
 
-        System.out.println("Would you like to add Additional Input?");
+        System.out.println("Would you like to add An Input?");
 
         /* a while loop that will continue to loop if the user enters an invalid entry */
         while(loop) {
