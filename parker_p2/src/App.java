@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,21 +21,21 @@ public class App {
     }
     // Only Edit Past This Point.
 
-    private void displayBmiStatistics(ArrayList<BodyMassIndex> bmiData) {
+    private static void displayBmiStatistics(ArrayList<BodyMassIndex> bmiData) {
         int i;
         double total = 0;
-        double average = 0;
+        double average;
 
-        for(i = 0; i < bmiData.size; i++) {
-            total += bmiData.bmiScore[i];
+        for(i = 0; i < bmiData.size(); i++) {
+            total += bmiData.get(i).getScore();
         }
-        average = total / bmiDate.size;
+        average = total / bmiData.size();
 
-        System.out.println("The average BMI for this input is " + average);
+        System.out.println("The average BMI for this input is: " + average);
     }
 
     /* Scans in the user's height */
-    private double getUserHeight() {
+    private static double getUserHeight() {
         double userHeight = 0;
         boolean loop = true;
         Scanner sc = new Scanner(System.in);
@@ -59,7 +58,7 @@ public class App {
     }
 
     /* Scans in the user's weight */
-    private double getUserWeight() {
+    private static double getUserWeight() {
         double userWeight = 0;
         boolean loop = true;
         Scanner sc = new Scanner(System.in);
@@ -81,19 +80,19 @@ public class App {
         return userWeight;
     }
 
-    private void displayBmiInfo(BodyMassIndex bmi) {
+    private static void displayBmiInfo(BodyMassIndex bmi) {
 
         System.out.println("Your BMI is: " + bmi.bmiScore);
 
-        if(bmi.bmiCatagory = "Underweight") {
+        if(bmi.bmiCategory.equals("Underweight")) {
             System.out.println("And you are Underweight according to the National " +
                     "Heart Lung and Blood Institution.\n");
         }
-        else if(bmi.bmiCatagory = "Normal Weight") {
+        else if(bmi.bmiCategory.equals("Normal Weight")) {
             System.out.println("And you are Normal Weight according to the National " +
                     "Heart Lung and Blood Institution.\n");
         }
-        else if(bmi.bmiCatagory = "Overweight") {
+        else if(bmi.bmiCategory.equals("Overweight")) {
             System.out.println("And you are Overweight according to the National " +
                     "Heart Lung and Blood Institution.\n");
         }
