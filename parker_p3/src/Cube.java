@@ -1,4 +1,11 @@
 class Cube extends Shape3D {
+    String name;
+    double area;
+    double volume;
+
+    double sideLength1;
+
+
     public Cube(double sideLength1) {
         super();
         this.sideLength1 = sideLength1;

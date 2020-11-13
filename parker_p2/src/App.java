@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -84,20 +85,14 @@ public class App {
 
         System.out.println("Your BMI is: " + bmi.bmiScore);
 
-        if(bmi.bmiCategory.equals("Underweight")) {
-            System.out.println("And you are Underweight according to the National " +
+        switch (bmi.bmiCategory) {
+            case "Underweight" -> System.out.println("And you are Underweight according to the National " +
                     "Heart Lung and Blood Institution.\n");
-        }
-        else if(bmi.bmiCategory.equals("Normal Weight")) {
-            System.out.println("And you are Normal Weight according to the National " +
+            case "Normal Weight" -> System.out.println("And you are Normal Weight according to the National " +
                     "Heart Lung and Blood Institution.\n");
-        }
-        else if(bmi.bmiCategory.equals("Overweight")) {
-            System.out.println("And you are Overweight according to the National " +
+            case "Overweight" -> System.out.println("And you are Overweight according to the National " +
                     "Heart Lung and Blood Institution.\n");
-        }
-        else {
-            System.out.println("And you are Obese according to the National " +
+            default -> System.out.println("And you are Obese according to the National " +
                     "Heart Lung and Blood Institution.\n");
         }
     }
@@ -120,18 +115,15 @@ public class App {
 
             /* a switch statement that confirms the user entered a Y or a N and it not will continue the above loop */
             switch (decision) {
-                case "Y":
-                    yn = true;
-                    loop = false;
-                    break;
-                case "N":
+                case "Y" -> loop = false;
+                case "N" -> {
                     yn = false;
                     loop = false;
-                    break;
-                default:
+                }
+                default -> {
                     System.out.println("Invalid entry");
                     loop = true;
-                    break;
+                }
             }
         }
         return yn;

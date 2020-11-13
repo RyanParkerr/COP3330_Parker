@@ -1,4 +1,10 @@
 class Sphere extends Shape3D {
+    String name;
+    double area;
+    double volume;
+
+    double radius;
+
     public Sphere(double radius) {
         super();
         this.radius = radius;

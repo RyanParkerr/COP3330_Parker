@@ -1,5 +1,14 @@
 class Pyramid extends Shape3D {
 
+    String name;
+    double area;
+    double volume;
+
+    double sideLength1;
+    double sideLength2;
+    double height;
+
+
     public Pyramid(double sideLength1, double sideLength2, double height) {
         super();
         this.sideLength1 = sideLength1;

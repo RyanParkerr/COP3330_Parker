@@ -1,5 +1,10 @@
 class Circle extends Shape2D {
 
+    String name;
+    double area;
+
+    double radius;
+
     public Circle(double radius) {
         super();
         this.radius = radius;

@@ -1,5 +1,10 @@
 class Square extends Shape2D {
 
+    String name;
+    double area;
+
+    double sideLength1;
+
     public Square(double sideLength1) {
         super();
         this.sideLength1 = sideLength1;

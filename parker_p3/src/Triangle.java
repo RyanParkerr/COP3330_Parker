@@ -1,4 +1,11 @@
 class Triangle extends Shape2D {
+    String name;
+    double area;
+
+    double sideLength1;
+    double height;
+
+
     public Triangle(double sideLength1, double height) {
         super();
         this.sideLength1 = sideLength1;
