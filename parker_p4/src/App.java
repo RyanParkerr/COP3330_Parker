@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class App {
     private static Scanner input = new Scanner(System.in);
     private TaskList TaskList;
+    private int markCount = 0;
 
     public App() {
         TaskList = new TaskList();
@@ -32,6 +33,7 @@ public class App {
                 // TaskList.createTaskList(sc);
                 return true;
             } else if (action == 2) {
+                loadPreviousTask(getExistingFileName());
                 return true;
             } else if (action == 3){
                 return false;
@@ -44,6 +46,21 @@ public class App {
             input.nextLine();
             return true;
         }
+    }
+
+    private String getExistingFileName() {
+        String fileName;
+        System.out.println("Enter the name of your file: ");
+        fileName = input.nextLine() + ".txt";
+        return fileName;
+    }
+
+    /*
+        Pseudo Code:
+        -
+     */
+    private void loadPreviousTask(String fileName) {
+
     }
 
     private void taskListAction() {
@@ -70,7 +87,7 @@ public class App {
             int taskAction = input.nextInt();
 
             if (taskAction == 1) {
-                TaskList.view();
+                TaskList.view(markCount);
                 return true;
             } else if (taskAction == 2) {
                 TaskItem task = getTaskInfo();
@@ -82,9 +99,12 @@ public class App {
                 if (TaskList.size() == 0) {
                     System.out.println("First add a task to your list.");
                 } else {
-                    int newTaskNum = editPrompt();
+                    int editNum = editPrompt();
                     TaskItem task = getTaskInfo();
-                    TaskList.edit(newTaskNum, task);
+                    TaskList.edit(editNum, task);
+                    if (editNum <= markCount) {
+                        markCount -= 1;
+                    }
                 }
                 return true;
             } else if (taskAction == 4) {
@@ -93,37 +113,64 @@ public class App {
                 } else {
                     int remTaskNum = removePrompt();
                     TaskList.remove(remTaskNum);
+                    if(remTaskNum <= markCount) {
+                        markCount -= 1;
+                    }
                 }
                 return true;
+                /*
+                    Pseudo Code:
+                    - DONE give indication of completion
+                    - DONE move to the top of the array
+                    - DONE add one to the markedCount
+                    - DONE when saved show mark count at the top
+                    - DONE when removed if removeNum is < mark count subtract one from mark count
+                 */
             } else if (taskAction == 5) {
                 if (TaskList.size() == 0) {
                     System.out.println("First Add a task to your List.");
+                } else if(markCount == TaskList.size()) {
+                    System.out.println("All Tasks are currently marked");
                 } else {
                     int markNum = markPrompt();
-//                    MarkedTasks.view();
-//                    tl.markCompletedTask(sc, taskListArray, markedTasksArray);
+                    TaskList.mark(markNum);
+                    markCount += 1;
                 }
                 return true;
-//            } else if (taskAction == 6) {
-//                if (taskListArray.size() == 0) {
-//                    System.out.println("First Add a task to your List.");
-//                } else if (markedTasksArray.size() == 0) {
+                /*
+                    Pseudo Code:
+                    - DONE move marked task to the end of the list
+                    - DONE subtract 1 from mark count
+                    - DONE if unMarkNum >= markCount print "only un-mark a marked task" error
+                 */
+            } else if (taskAction == 6) {
+                if (TaskList.size() == 0) {
+                    System.out.println("First Add a task to your List.");
+                } else if (markCount == 0) {
+                    System.out.println("There are currently no marked tasks.");
+                } else {
+                    int unMarkNum = unMarkPrompt();
+                    TaskList.unMark(unMarkNum);
+                    markCount -=1;
+                }
+//                old code:
 //                    System.out.println("No tasks are marked.");
 //                } else {
 //                    System.out.println("Which *Completed* task would you like to un-mark?");
 //                    tl.viewCurrentTaskList(taskListArray);
 //                    tl.unMarkCompletedTask(sc, taskListArray, markedTasksArray);
 //                }
-//                return true;
-//            } else if (taskAction == 7) {
-//                if (taskListArray.size() == 0) {
-//                    System.out.println("First Add a task to your List.");
-//                } else {
-//                    // save stuff here
-//                }
-//                return true;
-            } else if (taskAction == 8) {
+                return true;
+            } else if (taskAction == 7) {
+                if (TaskList.size() == 0) {
+                    System.out.println("First Add a task to your List.");
+                } else {
+                    // save stuff here
+                    writeTaskItem();
+                }
                 return false;
+            } else if (taskAction == 8) {
+                return leaveTaskListWarning();
             } else {
                 System.out.println("Invalid entry please try again. Enter 1-8");
                 return true;
@@ -135,41 +182,62 @@ public class App {
         }
     }
 
+    private boolean leaveTaskListWarning() {
+        while(true) {
+                if (shouldContinue(askShouldContinue())) {
+                    TaskList.wipe();
+                    markCount = 0;
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+    }
+
+
+    private boolean shouldContinue(String userInput) {
+        return userInput.toLowerCase().startsWith("y");
+    }
+
+    private static String askShouldContinue() {
+        System.out.println("By doing this you'll lose your current taskList, are you sure you'd like to do this without saving? \n" +
+                            "ENTER y to continue & any other key to cancel");
+        input.nextLine();
+        return input.nextLine();
+    }
+
     private void writeTaskItem() {
-        TaskList.write("output.txt");
+        TaskList.write(getFileName(), markCount);
+    }
+
+    private String getFileName() {
+        System.out.println("What would you like to name your List: ");
+        input.nextLine();
+        String answer = input.nextLine() + ".txt";
+        return answer;
+    }
+
+    private int unMarkPrompt() {
+        System.out.println("Which task would you like to un-mark?");
+        TaskList.view(markCount);
+        return getUnMarkResponse();
     }
 
     private int markPrompt() {
-        System.out.println("Which task would you like to mark as *Completed*?");
-        TaskList.viewMarked();
+        System.out.println("Which task would you like to mark?");
+        TaskList.view(markCount);
         return getMarkResponse();
-//        while (true) {
-//            try {
-//                System.out.println("Which task would you like to mark *COMPLETE*?");
-//                TaskList.view();
-//                int markNum = input.nextInt();
-//                if (TaskList.size() >= markNum) {
-//                    System.out.println("Begin removing your task:");
-//                    return markNum;
-//                } else {
-//                    System.out.println("Task number not found, please try again.");
-//                }
-//            } catch (InputMismatchException ex) {
-//                System.out.println("Please only enter a number, try again.");
-//                input.nextLine();
-//            }
-//        }
     }
 
     private int removePrompt() {
             System.out.println("Which task would you like to remove?");
-            TaskList.view();
+            TaskList.view(markCount);
             return getRemoveEditResponse();
     }
 
     private int editPrompt() {
             System.out.println("Which task would you like to edit?");
-            TaskList.view();
+            TaskList.view(markCount);
             return getRemoveEditResponse();
     }
 
@@ -199,15 +267,48 @@ public class App {
         while(true) {
             try {
                 response = input.nextInt();
-                if(TaskList.size() < response) {
-                    System.out.println("");
+                if(markCount > response) {
+                    System.out.println("Please only select a task that is not marked.");
+                } else if(TaskList.size() <= response) {
+                    System.out.println("Task number not found, please only enter a number for an existing task");
+                } else {
+                    break;
                 }
-                for (int i = 0; i < markedItems.size; i++) {
-
-                }
+            } catch (InputMismatchException ex) {
+                System.out.println("Please only enter a number, try again.");
+                input.nextLine();
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.println("Task not found, please only enter a number for an existing task");
+                input.nextLine();
             }
         }
-        return response();
+        return response;
+    }
+
+    private int getUnMarkResponse() {
+        int response;
+        while(true) {
+            try {
+                response = input.nextInt();
+                /*
+                    if we try to un-mark something that is not marked already return an error
+                 */
+                if(response >= markCount) {
+                    System.out.println("Please only select a task that is marked.");
+                } else if(TaskList.size() < response) {
+                    System.out.println("Task number not found, please only enter a number for an existing task");
+                } else {
+                    break;
+                }
+            } catch (InputMismatchException ex) {
+                System.out.println("Please only enter a number, try again.");
+                input.nextLine();
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.println("Task not found, please only enter a number for an existing task");
+                input.nextLine();
+            }
+        }
+        return response;
     }
 
 
