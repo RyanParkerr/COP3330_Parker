@@ -225,9 +225,9 @@ public class App {
         }
     }
 
-    private int addMarkCount() {
-        return markCount += 1;
-    }
+//    private int addMarkCount() {
+//        return markCount += 1;
+//    }
 
     private boolean leaveTaskListWarning() {
         while(true) {
