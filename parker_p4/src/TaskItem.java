@@ -20,9 +20,9 @@ public class TaskItem {
 
         if (descriptionIsValid(description)) {
             this.description = description;
-        } else {
-            throw new InvalidDescriptionException("Description is invalid. Must be at lease 1 character long");
-        }
+        } // else {
+//            throw new InvalidDescriptionException("Description is invalid. Must be at lease 1 character long");
+//        }
     }
 
     private boolean titleIsValid(String title) {
@@ -30,10 +30,47 @@ public class TaskItem {
     }
 
     private boolean dateIsValid(String date) {
-        if (date.indexOf("-") == 4 || date.indexOf("-") == 7) {
-            return true;
-        } else {
-            return false;
+        while(true) {
+            try {
+                int errorCount = 0;
+
+                if (date.indexOf("-") == 4) {
+                    errorCount += 1;
+                }
+                if (date.indexOf("-", 5) == 7) {
+                    errorCount += 1;
+                }
+                if (date.length() != 10) {
+                    return false;
+                }
+                if (Integer.parseInt(date.substring(0, 4)) < 2020) {
+                    return false;
+                }
+                if (Integer.parseInt(date.substring(5, 7)) < 0) {
+                    return false;
+                }
+                if (Integer.parseInt(date.substring(5, 7)) > 12) {
+                    return false;
+                }
+                if (Integer.parseInt(date.substring(8, 10)) > 31) {
+                    return false;
+                }
+                if (Integer.parseInt(date.substring(8, 10)) < 0) {
+                    return false;
+                }
+                if (errorCount == 2) {
+                    return true;
+                } else if (errorCount != 2) {
+                    return false;
+                } else {
+                    System.out.println("NEW ERROR OCCURRED???????");
+                    return false;
+                }
+            } catch (NumberFormatException ex) {
+//                Scanner input = new Scanner(System.in);
+//                input.nextLine();
+                return false;
+            }
         }
     }
 
@@ -64,11 +101,11 @@ public class TaskItem {
             super(msg);
         }
     }
-
-    class InvalidDescriptionException extends IllegalArgumentException {
-        public InvalidDescriptionException(String msg) {
-            super(msg);
-        }
+}
+//    class InvalidDescriptionException extends IllegalArgumentException {
+//        public InvalidDescriptionException(String msg) {
+//            super(msg);
+//        }
 
 
 //    public static String createTaskItem(Scanner sc, ArrayList taskListArray) {
@@ -132,8 +169,8 @@ public class TaskItem {
 //
 //            return description;
 //        }
-    }
-}
+//    }
+//}
 
 
 

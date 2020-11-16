@@ -1,13 +1,12 @@
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class TaskList {
     List<TaskItem> taskList;
     private static Scanner input = new Scanner(System.in);
+    private static Scanner fileReader;
 
     public TaskList() {
         taskList = new ArrayList<>();
@@ -34,17 +33,26 @@ public class TaskList {
         }
     }
 
+    public TaskItem get(int number) {
+        return taskList.get(number);
+    }
+
     public void write(String filename, int markCount) {
         try(Formatter output = new Formatter(filename)) {
 //            output.format(filename + ":\n");
-            output.format(markCount + " COMPLETED TASKS" + "\n");
-            for (int i = 0; i < markCount; i++) {
+            output.format(taskList.size() + "\n"); // first number is total tasks
+            output.format(markCount + "\n"); // second number is total COMPLETED tasks
+
+//            for (int i = 0; i < markCount; i++) {
+//                TaskItem task = taskList.get(i);
+//                output.format("[" + task.getDate() + "]\n" + task.getTitle() + "\n" + task.getDescription() + "\n*COMPLETED*" + "\n");
+//            }
+
+//            I don't need this anymore since i put the total markCount at the top of the file.
+
+            for (int i = 0; i < taskList.size(); i++) {
                 TaskItem task = taskList.get(i);
-                output.format("[" + task.getDate() + "] " + task.getTitle() + " " + task.getDescription() + " *COMPLETED*" + "\n");
-            }
-            for (int i = markCount; i < taskList.size(); i++) {
-                TaskItem task = taskList.get(i);
-                output.format("[" + task.getDate() + "] " + task.getTitle() + " " + task.getDescription() + "\n");
+                output.format(task.getDate() + "\n" + task.getTitle() + "\n" + task.getDescription() + "\n");
             }
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to find this File...");
@@ -53,6 +61,44 @@ public class TaskList {
         }
     }
 
+    public int readFile(String fileName) {
+        try {
+            fileReader = new Scanner(new File(fileName));
+            int totalTasks = fileReader.nextInt();
+//            fileReader.nextLine();
+            int markCount = fileReader.nextInt();
+            fileReader.nextLine();
+
+            for (int i = 0; i < totalTasks; i++) {
+                TaskItem task = loadTaskItem();
+                taskList.add(task);
+            }
+            return markCount;
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("Unable to find this File...");
+        } catch (NoSuchElementException ex) {
+            System.out.println("this  file is empty...");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    private TaskItem loadTaskItem() {
+        TaskItem task;
+        String date = loadInput();
+        String title = loadInput();
+        String description = loadInput();
+
+        task = new TaskItem(title, date, description);
+
+        return task;
+    }
+
+    private String loadInput() {
+        return fileReader.nextLine();
+    }
 
     public int size() {
         return taskList.size();

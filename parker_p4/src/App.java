@@ -1,3 +1,10 @@
+/*
+    TO-DO LIST:
+    - finish test cases
+    - DONE fix "update the current task list" so it actually updates the previous list
+    - DONE make it do that due date can only be a real date
+ */
+import java.io.File;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -5,6 +12,7 @@ public class App {
     private static Scanner input = new Scanner(System.in);
     private TaskList TaskList;
     private int markCount = 0;
+    private int isLoadedList = 0;
 
     public App() {
         TaskList = new TaskList();
@@ -16,7 +24,8 @@ public class App {
             System.out.println("Main Menu");
             System.out.println("1. Create Task List");
             System.out.println("2. Load Task List");
-            System.out.println("3. Quit");
+            System.out.println("3. Delete Task List");
+            System.out.println("4. Quit");
             menuAction = menuAction();
         }
 
@@ -29,13 +38,20 @@ public class App {
             int action = input.nextInt();
 
             if (action == 1) {
-                taskListAction();
+                taskListAction(null);
                 // TaskList.createTaskList(sc);
                 return true;
             } else if (action == 2) {
-                loadPreviousTask(getExistingFileName());
+                isLoadedList = 1;
+                String fileName = getExistingFileName();
+                loadPreviousTask(fileName);
+                taskListAction(fileName);
                 return true;
-            } else if (action == 3){
+            } else if (action == 3) {
+                String fileName = getExistingFileName();
+                deleteFile(fileName);
+                return true;
+            } else if (action == 4) {
                 return false;
             } else {
                 System.out.println("Invalid Entry. Please try again, numbers 1-3");
@@ -48,22 +64,39 @@ public class App {
         }
     }
 
+    private void deleteFile(String fileName) {
+        try {
+            File f = new File(fileName);
+            if(f.delete()) {
+                System.out.println(f.getName() + " deleted");   //getting and printing the file name
+            } else {
+                System.out.println("There is no existing file with that name");
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private String getExistingFileName() {
         String fileName;
-        System.out.println("Enter the name of your file: ");
+        System.out.println("Enter the name of the file: ");
+        input.nextLine();
         fileName = input.nextLine() + ".txt";
         return fileName;
     }
 
     /*
         Pseudo Code:
-        -
+        - DONE read the return String of getExistingFileName()
+        - DONE read the information into a new and filled TaskList of TaskItems
+        - DONE call taskListAction()
      */
-    private void loadPreviousTask(String fileName) {
 
+    private void loadPreviousTask(String fileName) {
+        markCount = TaskList.readFile(fileName);
     }
 
-    private void taskListAction() {
+    private void taskListAction(String fileName) {
         // initialize Tasks as a list of Tasks
         boolean taskAction = true;
 
@@ -75,14 +108,18 @@ public class App {
             System.out.println("4. Remove a Task");
             System.out.println("5. Mark a Task *Completed*");
             System.out.println("6. Un-mark a *Completed* Task");
-            System.out.println("7. Save the Current Task List");
+            if(isLoadedList == 0) {
+                System.out.println("7. Save the Current Task List");
+            } else {
+                System.out.println("7. Update the Current Task List");
+            }
             System.out.println("8. Exit to the Main Menu");
 
-            taskAction = taskOperatorAction();
+            taskAction = taskOperatorAction(fileName);
         }
     }
 
-    private boolean taskOperatorAction() {
+    private boolean taskOperatorAction(String fileName) {
         try {
             int taskAction = input.nextInt();
 
@@ -166,7 +203,13 @@ public class App {
                     System.out.println("First Add a task to your List.");
                 } else {
                     // save stuff here
-                    writeTaskItem();
+                     if(isLoadedList == 1) {
+                        writeTaskItem(fileName);
+                     } else {
+                        writeTaskItem(getFileName());
+                    }
+                    TaskList.wipe();
+                    isLoadedList = 0;
                 }
                 return false;
             } else if (taskAction == 8) {
@@ -182,11 +225,16 @@ public class App {
         }
     }
 
+    private int addMarkCount() {
+        return markCount += 1;
+    }
+
     private boolean leaveTaskListWarning() {
         while(true) {
                 if (shouldContinue(askShouldContinue())) {
                     TaskList.wipe();
                     markCount = 0;
+                    isLoadedList = 0;
                     return false;
                 } else {
                     return true;
@@ -206,15 +254,14 @@ public class App {
         return input.nextLine();
     }
 
-    private void writeTaskItem() {
-        TaskList.write(getFileName(), markCount);
+    private void writeTaskItem(String fileName) {
+        TaskList.write(fileName, markCount);
     }
 
     private String getFileName() {
         System.out.println("What would you like to name your List: ");
         input.nextLine();
-        String answer = input.nextLine() + ".txt";
-        return answer;
+        return input.nextLine() + ".txt";
     }
 
     private int unMarkPrompt() {
@@ -313,7 +360,7 @@ public class App {
 
 
     private TaskItem getTaskInfo() {
-        TaskItem task = null;
+        TaskItem task;
         input.nextLine();
         while (true) {
             try {
@@ -327,8 +374,8 @@ public class App {
                 System.out.println("Your title was invalid");
             } catch (TaskItem.InvalidDateException ex) {
                 System.out.println("Your Date was invalid. Enter in the YYY-MM-DD format:");
-            } catch (TaskItem.InvalidDescriptionException ex) {
-                System.out.println("Your Description was invalid");
+//            } catch (TaskItem.InvalidDescriptionException ex) {
+//                System.out.println("Your Description was invalid");
             }
         }
         return task;
