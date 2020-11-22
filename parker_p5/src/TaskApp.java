@@ -20,17 +20,17 @@ public class TaskApp {
         while(true) {
             displayTaskMenu();
             taskMenuResponse = getTaskMenuChoice();
-            if (taskMenuResponse.contains("1") || taskMenuResponse.contains("create")) {
+            if (taskMenuResponse.contains("1")) {
                 createTaskList();
                 taskListActions();
-            } else if (taskMenuResponse.startsWith("2") || taskMenuResponse.contains("load")) {
+            } else if (taskMenuResponse.startsWith("2")) {
                 try {
                     loadTaskList();
                     taskListActions();
                 } catch(InputMismatchException | IllegalArgumentException ex) {
                     System.out.println(ex.getMessage());
                 }
-            } else if (taskMenuResponse.startsWith("3") || taskMenuResponse.contains("quit")) {
+            } else if (taskMenuResponse.startsWith("3")) {
                 break;
             } else {
                 System.out.println("Invalid menu response. Please try again");
@@ -59,7 +59,7 @@ public class TaskApp {
         System.out.println("3) edit task item");
         System.out.println("4) remove task item");
         System.out.println("5) mark task *Completed*");
-        System.out.println("6. unmark task");
+        System.out.println("6) unmark task");
         System.out.println("7) save task list");
         System.out.println("8) exit to task menu");
         System.out.println();
@@ -70,45 +70,45 @@ public class TaskApp {
         while(true) {
             displayTaskActions();
             taskMenuResponse = getTaskMenuChoice();
-            if (taskMenuResponse.contains("1") | taskMenuResponse.contains("view")) {
+            if (taskMenuResponse.contains("1")) {
                 if(taskList.size() > 0) {
                     System.out.println(taskList.viewAllTasks());
                 } else {
                     System.out.println("There are no tasks to view");
                 }
-            } else if (taskMenuResponse.contains("2") | taskMenuResponse.contains("add")) {
+            } else if (taskMenuResponse.contains("2")) {
                     addTask();
-            } else if (taskMenuResponse.contains("3") | taskMenuResponse.contains("edit")) {
+            } else if (taskMenuResponse.contains("3")) {
                 if (taskList.size() > 0) {
                     editTask();
                 } else {
                     System.out.println("First you must add a task.");
                 }
-            } else if (taskMenuResponse.contains("4") | taskMenuResponse.contains("remove")) {
+            } else if (taskMenuResponse.contains("4")) {
                 if (taskList.size() > 0) {
                     removeTask();
                 } else {
                     System.out.println("First you must add a task.");
                 }
-            } else if (taskMenuResponse.contains("5") | taskMenuResponse.contains("mark")) {
+            } else if (taskMenuResponse.contains("5")) {
                 if (taskList.size() > 0) {
                     markTask();
                 } else {
                     System.out.println("First you must add a task.");
                 }
-            } else if (taskMenuResponse.contains("6") | taskMenuResponse.contains("unmark")) {
+            } else if (taskMenuResponse.contains("6")) {
                 if (taskList.size() > 0) {
                     unmarkTask();
                 } else {
                     System.out.println("First you must add a task.");
                 }
-            } else if (taskMenuResponse.contains("7") | taskMenuResponse.contains("save")) {
+            } else if (taskMenuResponse.contains("7")) {
                 if (taskList.size() != 0) {
                     saveTaskList();
                 } else {
                     System.out.println("There are no tasks added to this Task List.");
                 }
-            } else if (taskMenuResponse.contains("8") | taskMenuResponse.contains("exit")) {
+            } else if (taskMenuResponse.contains("8")) {
                 break;
             } else {
                 System.out.println("Invalid action. Please try again");

@@ -15,11 +15,11 @@ public class MainMenu {
         while(true) {
             displayMainMenu();
             mainMenuResponse = getMainMenuChoice();
-            if (mainMenuResponse.contains("1") || mainMenuResponse.contains("task list")) {
+            if (mainMenuResponse.contains("1")) {
                 TaskApp.runTaskMenu();
-            } else if (mainMenuResponse.startsWith("2") || mainMenuResponse.contains("contact list")) {
+            } else if (mainMenuResponse.startsWith("2")) {
                 ContactApp.runContactMenu();
-            } else if (mainMenuResponse.startsWith("3") || mainMenuResponse.contains("exit")) {
+            } else if (mainMenuResponse.startsWith("3")) {
                 break;
             } else {
                 System.out.println("Invalid menu response. Please try again");

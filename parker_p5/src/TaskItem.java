@@ -3,7 +3,8 @@ import java.time.LocalDate;
 public class TaskItem {
     private String title;
     private String description;
-    private LocalDate date;
+    private String date;
+    private LocalDate d;
     private boolean completion;
 
     public String getTitle() {
@@ -14,7 +15,7 @@ public class TaskItem {
         return description;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -27,22 +28,45 @@ public class TaskItem {
     }
 
     public TaskItem(String title, String description, String date) {
-        LocalDate d;
-        if(title.length() == 0) {
-            throw new IllegalArgumentException("All tasks must be at least 1 character long.");
+        if (titleIsValid(title)) {
+            this.title = title;
+        } else {
+            throw new InvalidTitleException("Title is invalid. Must be at lease 1 character long");
         }
-        try {
-            d = LocalDate.parse(date);
-        } catch (java.time.format.DateTimeParseException ex) {
-            throw new IllegalArgumentException("Date must be in (YYYY-MM-DD) format");
+        if (dateIsValid(date)) {
+            this.date = d.toString();
+        } else {
+            throw new InvalidDateException("Date is invalid. Must be in YYY-MM-DD format");
         }
-
-        this.title = title;
         this.description = description;
-        this.date = d;
         this.completion = false;
     }
 
+    private boolean titleIsValid(String title) {
+        return title.length() > 0;
+    }
+
+    private boolean dateIsValid(String date) {
+        try {
+            d = LocalDate.parse(date);
+            return true;
+        } catch (java.time.format.DateTimeParseException ex) {
+            return false;
+        }
+    }
+
+    class InvalidTitleException extends IllegalArgumentException {
+        public InvalidTitleException(String msg) {
+            super(msg);
+        }
+    }
+
+    class InvalidDateException extends IllegalArgumentException {
+        public InvalidDateException(String msg) {
+            super(msg);
+        }
+    }
+    
     @Override
     public String toString() {
         return String.format("[%s] %s: %s", date, title, description);
