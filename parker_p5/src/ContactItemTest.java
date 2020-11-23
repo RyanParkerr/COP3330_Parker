@@ -84,5 +84,4 @@ public class ContactItemTest {
 
         assertEquals("Name: Ryan Parker \n Phone Number: 123-123-1234 \n Email Address: ryan@gmail.com ", contactList.get(0).toString());
     }
-
 }

@@ -15,15 +15,15 @@ public class ContactList {
 
     public ContactItem get (int contactItemNumber) { return contactList.get(contactItemNumber); }
 
-    // the next 4 functions are for JUNIT testing purposes
-    public String getFirstName(int index) { return this.get(index).getFirstName(); }
-
-    public String getLastName(int index) { return this.get(index).getLastName(); }
-
-    public String getPhoneNumber(int index) { return this.get(index).getPhoneNumber(); }
-
-    public String getEmailAddress(int index) { return this.get(index).getEmailAddress(); }
-    // end of JUNIT primary function
+//    // the next 4 functions were for JUNIT testing purposes
+//    public String getFirstName(int index) { return this.get(index).getFirstName(); }
+//
+//    public String getLastName(int index) { return this.get(index).getLastName(); }
+//
+//    public String getPhoneNumber(int index) { return this.get(index).getPhoneNumber(); }
+//
+//    public String getEmailAddress(int index) { return this.get(index).getEmailAddress(); }
+//    // end of JUNIT primary function
 
     public void update(int index, String firstName, String lastName, String phoneNumber, String emailAddress) {
         ContactItem contactItem = new ContactItem(firstName, lastName, phoneNumber, emailAddress);

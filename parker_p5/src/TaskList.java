@@ -13,7 +13,7 @@ public class TaskList {
 
     public void remove(int taskItemNumber) { taskList.remove(taskItemNumber); }
 
-    private TaskItem get (int taskItemNumber) { return taskList.get(taskItemNumber); }
+    public TaskItem get (int taskItemNumber) { return taskList.get(taskItemNumber); }
 
     // the next 4 functions are for JUNIT testing purposes
     public String getTitle(int index) { return this.get(index).getTitle(); }

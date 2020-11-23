@@ -162,7 +162,7 @@ public class ContactApp {
         if(response < contactList.size()) {
             contactList.remove(response);
         } else {
-            System.out.println("There is no contact with that index.");
+            throw new IndexOutOfBoundsException("There is no contact with that index.");
         }
     }
 
