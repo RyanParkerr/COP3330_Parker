@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -20,6 +21,8 @@ public class MainMenu {
             } else if (mainMenuResponse.startsWith("2")) {
                 ContactApp.runContactMenu();
             } else if (mainMenuResponse.startsWith("3")) {
+                deleteFile(getExistingFileName());
+            } else if (mainMenuResponse.startsWith("4")) {
                 break;
             } else {
                 System.out.println("Invalid menu response. Please try again");
@@ -31,12 +34,33 @@ public class MainMenu {
         System.out.println("---------");
         System.out.println("1) task list");
         System.out.println("2) contact list");
-        System.out.println("3) exit program");
+        System.out.println("3) delete list");
+        System.out.println("4) exit program");
         System.out.println();
+    }
+
+    private void deleteFile(String fileName) {
+        try {
+            File f = new File(fileName);
+            if(f.delete()) {
+                System.out.println(f.getName() + " will be deleted once the program is terminated.");   //getting and printing the file name
+            } else {
+                System.out.println("There is no existing file with that name");
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private String getMainMenuChoice() {
         System.out.print("> ");
         return input.nextLine();
+    }
+
+    private String getExistingFileName() {
+        String fileName;
+        System.out.println("Enter the name of the file: ");
+        fileName = input.nextLine();
+        return fileName;
     }
 }
